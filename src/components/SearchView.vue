@@ -26,7 +26,9 @@ const originTagList = [
 
 const tagList = ref(originTagList)
 
-const onSearch = (val: any) => {
+const onSearch = (val: string) => {
+    // val: 对应文本框的值
+    console.log(val);
     tagList.value = originTagList.map(parentTag => {
     const tempChildren = [...parentTag.children];
     const tempParentTag = {...parentTag};
