@@ -21,11 +21,26 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { showToast } from 'vant';
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
+import { routes } from '../route/index'
 
 const router = useRouter();
+const DEFAULT_TITLE = '伙伴匹配';
+const title = ref(DEFAULT_TITLE);
 
-const onClickLeft = () => showToast('left');
+
+router.beforeEach((to, from) => {
+   const toPath = to.path;
+   const route = routes.find((route) => {
+    return toPath == route.path;
+  })
+  title.value = route?.title ?? DEFAULT_TITLE;
+})
+
+
+const onClickLeft = () => {
+    router.back();
+};
 
 const onClickRight = () => {
     // 编程式路由
@@ -37,4 +52,9 @@ const onChange = (index: string) => showToast(`标签 ${index}`);
 
 </script>
 
-<style scoped></style>
+
+<style scoped>
+#content {
+  padding-bottom: 50px;
+}
+</style>
