@@ -29,10 +29,11 @@ const DEFAULT_TITLE = '伙伴匹配';
 const title = ref(DEFAULT_TITLE);
 
 
+// 路由前卫 （发生路由跳转之前的回掉）
 router.beforeEach((to, from) => {
    const toPath = to.path;
    const route = routes.find((route) => {
-    return toPath == route.path;
+    return toPath == route.path; 
   })
   title.value = route?.title ?? DEFAULT_TITLE;
 })

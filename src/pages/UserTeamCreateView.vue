@@ -1,12 +1,7 @@
 <template>
     <div id="teamPage">
       <van-search v-model="searchText" placeholder="搜索队伍" @search="onSearch" />
-      <van-tabs v-model:active="active" @change="onTabChange">
-        <van-tab title="公开" name="public" />
-        <van-tab title="加密" name="private" />
-      </van-tabs>
-      <div style="margin-bottom: 16px" ></div>
-      <van-button class="add-button" type="primary" icon="plus" @click="toAddTeam" />
+      <van-button type="primary" @click="doJoinTeam">创建队伍</van-button>
       <team-card-list :teamList="teamList" />
       <van-empty v-if="teamList?.length < 1" description="数据为空"/>
     </div>
@@ -19,28 +14,12 @@
   import {onMounted, ref} from "vue";
   import myAxios from "../plugins/myAxios";
   import {Toast} from "vant";
-  import {Result} from '../models/result'
   
-  const active = ref('public')
   const router = useRouter();
   const searchText = ref('');
   
-  /**
-   * 切换查询状态
-   * @param name
-   */
-  const onTabChange = (name: string) => {
-    // 查公开
-    if (name === 'public') {
-      listTeam(searchText.value, 0);
-    } else {
-      // 查加密
-      listTeam(searchText.value, 2);
-    }
-  }
-  
-  // 跳转到创建队伍页
-  const toAddTeam = () => {
+  // 跳转到加入队伍页
+  const doJoinTeam = () => {
     router.push({
       path: "/team/add"
     })
@@ -51,15 +30,13 @@
   /**
    * 搜索队伍
    * @param val
-   * @param status
    * @returns {Promise<void>}
    */
-  const listTeam = async (val = '', status = 0) => {
-    const res:  Result= await myAxios.get("/team/list", {
+  const listTeam = async (val = '') => {
+    const res = await myAxios.get("/team/list/my/create", {
       params: {
         searchText: val,
         pageNum: 1,
-        status,
       },
     });
     if (res?.code === 0) {
@@ -69,17 +46,21 @@
     }
   }
   
+  
   // 页面加载时只触发一次
   onMounted( () => {
     listTeam();
   })
   
-  const onSearch = (val: string) => {
+  const onSearch = (val) => {
     listTeam(val);
   };
   
   </script>
   
   <style scoped>
+  #teamPage {
+  
+  }
   </style>
   

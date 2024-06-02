@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { showToast } from 'vant';
+import {useRouter} from "vue-router";
 
+
+const router = useRouter()
 const searchText = ref('');
 const activeIds = ref([]);
 const activeIndex = ref(0);
@@ -38,27 +40,58 @@ const onSearch = (val: string) => {
 
 
 } // 按下回车就会显示
-const onCancel = () => showToast('取消');
+const onCancel = () => {
+    searchText.value = '';
+   tagList.value = originTagList;
+}
 
 // 关闭已选择的标签
 const doClose = (tagId: string) => {
     activeIds.value = activeIds.value.filter(item =>  item !== tagId);
 };
 
+
+/**
+ * 执行搜索   ====> 跳转到路由搜索页
+ */
+ const doSearchResult = () => {
+  router.push({
+    path: '/user/list',
+    query: {
+      tags: activeIds.value
+    }
+  })
+}
+
+
 </script>
 
 <template>
     <form action="/">
-        <van-search v-model="searchText" show-action placeholder="请输入搜索关键词" @search="onSearch" @cancel="onCancel" />
+        <van-search 
+            v-model="searchText" 
+            show-action 
+            placeholder="请输入搜索关键词" 
+            @search="onSearch" 
+            @cancel="onCancel" />
     </form>
     <van-divider content-position="left">已选标签</van-divider>
-    <van-tag v-for="tagId in  activeIds"  type="primary" closeable @close="doClose(tagId)">
-      {{tagId}}
-    </van-tag>
+    <div v-if="activeIds.length === 0">请选择标签</div>
+    <van-row gutter="16" style="padding: 0 16px;">
+        <van-col v-for="tagId in activeIds">
+            <van-tag  type="primary" closeable @close="doClose(tagId)">
+                {{tagId}}
+            </van-tag>
+        </van-col>
+    </van-row>
+    
 
-    <van-divider content-position="left">标签</van-divider>
+    <van-divider content-position="left">选择标签</van-divider>
     <!-- @click-item="clickItem" -->
     <van-tree-select v-model:active-id="activeIds"  v-model:main-active-index="activeIndex" :items="tagList"   />
+    <div style="padding: 12px;">
+        <van-button block type="primary" @click="doSearchResult">搜索</van-button>
+    </div>
 
 </template>
 
