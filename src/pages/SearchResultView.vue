@@ -1,5 +1,6 @@
 <template>
-    <user-card-list :user-list="userList" />
+  <!-- loading: 是这个组件的一个属性 -->
+    <user-card-list :user-list="userList" :loading="loading"/>
     <van-empty v-if="!userList || userList.length < 1" description="搜索结果为空" />
  </template>
   
@@ -11,42 +12,47 @@ import myAxios from "../plugins/myAxios";
 import {Toast} from "vant";
 import qs from 'qs';
 import UserCardList from "../components/UserCardList.vue";
+import { UserType } from '../models/user';
 
 const route = useRoute(); // 获取路由参数信息
 const {tags} = route.query;
 
-const userList = ref([]);
+const loading = ref(true)
+
+const userList = ref<UserType[]>([]);
 
 onMounted(async () => {
     // await: 同步等待结果
     // Promise() : 异步等待结果
-    // const userListData = await myAxios.get('//user/search/tags', {
-    //     params: {
-    //         tagNameList: tags
-    //     },
-    //     paramsSerializer: params => {
-    //         return qs.stringify(params, {indices: false})
-    //      }
-    // })
-    // .then(function (response) {
-    //     console.log('/user/search/tags succeed', response);
-    //     return response?.data;
-    //   })
-    // .catch(function (error) {
-    //     console.error('/user/search/tags error', error);
-    //     Toast.fail('请求失败');
-    // })
-    // console.log(userListData)
-    // if (userListData) {
-    //     userListData.forEach(user => {
-    //     if (user.tags) {
-    //         user.tags = JSON.parse(user.tags);
-    //     }
-    //     })
-    //     userList.value = userListData;
-    // }
+    const userListData :UserType[] = await myAxios.get('/user/search/tags', {
+        params: {
+            tagNameList: tags
+        },
+        paramsSerializer: params => {
+            return qs.stringify(params, {indices: false})
+         }
+    })
+    .then(function (response) {
+        console.log('/user/search/tags succeed', response);
+        return response?.data;
+      })
+    .catch(function (error) {
+        console.error('/user/search/tags error', error);
+        Toast.fail('请求失败');
+    })
+    console.log(userListData)
+    if (userListData) {
+        userListData.forEach(user => {
+        if (user.tags) {
+            user.tags = JSON.parse(user.tags);
+        }
+        })
+        userList.value = userListData;
+        loading.value = false;
+        console.log('uuu',userList)
+    }
 
-    userList.value = [mockUser];
+    // userList.value = [mockUser];
 
 })
 

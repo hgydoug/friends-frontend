@@ -57,6 +57,8 @@ const doClose = (tagId: string) => {
  const doSearchResult = () => {
   router.push({
     path: '/user/list',
+    // query : 查询参数，url后面的参数
+    // param: 不是url后面的参数
     query: {
       tags: activeIds.value
     }
@@ -78,6 +80,7 @@ const doClose = (tagId: string) => {
     <van-divider content-position="left">已选标签</van-divider>
     <div v-if="activeIds.length === 0">请选择标签</div>
     <van-row gutter="16" style="padding: 0 16px;">
+        <!-- v-for在哪里，每次循环对应的位置都会产生一个新标签。 -->
         <van-col v-for="tagId in activeIds">
             <van-tag  type="primary" closeable @close="doClose(tagId)">
                 {{tagId}}

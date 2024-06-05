@@ -13,4 +13,7 @@ export default defineConfig({
     Components({
       resolvers: [VantResolver()],
     }),],
+    server: {
+      port: 3000 // 指定启动端口为3000
+    }
 })
