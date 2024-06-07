@@ -1,4 +1,4 @@
-import { createMemoryHistory, createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import IndexView from '../pages/IndexView.vue'
 import  TeamView from '../pages/TeamView.vue'
