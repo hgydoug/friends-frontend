@@ -15,28 +15,29 @@
   
   <script setup lang="ts">
   import {useRouter} from "vue-router"
-  import {ref} from "vue"
+  import {onMounted,ref} from "vue"
   // import myAxios from "../plugins/myAxios";
   // import {Toast} from "vant";
-  // import {getCurrentUser} from "../services/user";
+  import {getCurrentUser} from "../service/user";
+import { UserType } from "../models/user";
   
-  const defaultUser = {
-    id: 1,
-    username: '鱼皮',
-    userAccount: 'dogYupi',
-    avatarUrl: 'https://636f-codenav-8grj8px727565176-1256524210.tcb.qcloud.la/img/logo.png',
-    gender: '男',
-    phone: '123112312',
-    email: '12345@qq.com',
-    planetCode: '1234',
-    createTime: new Date().toDateString(),
-  }
+  // const defaultUser = {
+  //   id: 1,
+  //   username: '鱼皮',
+  //   userAccount: 'dogYupi',
+  //   avatarUrl: 'https://636f-codenav-8grj8px727565176-1256524210.tcb.qcloud.la/img/logo.png',
+  //   gender: '男',
+  //   phone: '123112312',
+  //   email: '12345@qq.com',
+  //   planetCode: '1234',
+  //   createTime: new Date().toDateString(),
+  // }
   
-  const user = ref(defaultUser);
+  const user = ref<UserType>();
   
-  // onMounted(async () => {
-  //   // user.value = await getCurrentUser();
-  // })
+  onMounted(async () => {
+    user.value = await getCurrentUser();
+  })
   
   const router = useRouter();
   
