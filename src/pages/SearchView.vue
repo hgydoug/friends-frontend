@@ -58,7 +58,7 @@ const doClose = (tagId: string) => {
   router.push({
     path: '/user/list',
     // query : 查询参数，url后面的参数
-    // param: 不是url后面的参数
+    // param: 不是url后面的参数。
     query: {
       tags: activeIds.value
     }

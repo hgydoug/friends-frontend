@@ -1,4 +1,4 @@
-import { createMemoryHistory, createRouter } from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 
 import IndexView from '../pages/IndexView.vue'
 import  TeamView from '../pages/TeamView.vue'
@@ -33,9 +33,19 @@ const routes = [
 ]
 
 const router =createRouter({
-    history: createMemoryHistory(),
+    // webHashHistory() : 访问前要加# http://localhost:3000/#/user/login
+    // webhistory: 不用在访问路径前面加 # http://localhost:3000/user/login
+    history: createWebHistory(), 
     routes,
 })
+
+// router.beforeEach((to , from , next) => {
+//     if (to.path == '/user/login') {
+//         next();
+//     } else {
+//         // 如果不是登录页，判断用户是否登录
+//     }
+// })
 
 export {
     router,

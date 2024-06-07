@@ -23,8 +23,15 @@ myAxios.interceptors.response.use(function (response) {
     console.log('我收到你的响应啦', response)
     // 未登录则跳转到登录页
     if (response?.data?.code === 40100) {
+        console.log('未登录')
         const redirectUrl = window.location.href;
-        window.location.href = `/user/login?redirect=${redirectUrl}`;
+        if (!redirectUrl.endsWith("/user/login")) {
+            window.location.href = `/user/login?redirect=${redirectUrl}`;
+        } else {
+            window.location.href = `/user/login`;
+        }
+       
+        // window.location.href = `/user/login`;
     }
     // Do something with response data
     return response.data;
