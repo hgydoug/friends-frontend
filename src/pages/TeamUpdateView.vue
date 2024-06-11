@@ -18,6 +18,7 @@
               placeholder="请输入队伍描述"
           />
           <van-field
+              v-model="addTeamData.expireTime"
               is-link
               readonly
               name="datetimePicker"
@@ -25,13 +26,11 @@
               :placeholder="addTeamData.expireTime ?? '点击选择过期时间'"
               @click="showPicker = true"
           />
-          <van-popup v-model:show="showPicker" position="bottom">
+            <van-popup v-model:show="showPicker" position="bottom">
             <van-date-picker
-                v-model="addTeamData.expireTime"
-                @confirm="showPicker = false"
+                @confirm="onConfirm"
                 type="datetime"
                 title="请选择过期时间"
-                :min-date="minDate"
             />
           </van-popup>
           <van-field name="radio" label="队伍状态">
@@ -65,9 +64,16 @@
   <script setup lang="ts">
   
   import {useRoute, useRouter} from "vue-router";
-  import {onMounted, ref} from "vue";
+  import {onMounted, ref, computed} from "vue";
   import myAxios from "../plugins/myAxios";
-  import {Toast} from "vant";
+  // import {Toast} from "vant";
+  import { showSuccessToast, showFailToast } from 'vant';
+  import {formateTime, getYearMonthDay} from '../utils/dateutils';
+import { TeamType } from "../models/team";
+import { Result } from "../models/result";
+import { TeamFormType } from "../models/team.form";
+
+
   
   const router = useRouter();
   const route = useRoute();
@@ -80,44 +86,80 @@
   const id = route.query.id;
   
   // 需要用户填写的表单数据
-  const addTeamData = ref({})
+  const addTeamData = ref<TeamFormType>({} as TeamFormType)
   
   // 获取之前的队伍信息
   onMounted(async () => {
-    if (id <= 0) {
-      Toast.fail('加载队伍失败');
+    console.log('update id: ', id)
+    if (!id) { // id < 0
+      showFailToast('加载队伍失败');
       return;
     }
-    const res = await myAxios.get("/team/get", {
+    const res: Result = await myAxios.get("/team/get", {
       params: {
         id,
       }
     });
+    console.log('res:', res)
     if (res?.code === 0) {
+      // const team = res.data as TeamType;
       addTeamData.value = res.data;
+      if (addTeamData.value) {
+            addTeamData.value.expireTime = getYearMonthDay(res.data.expireTime).join('/');
+            addTeamData.value.status = res.data.status.toString();
+      }
+     
+      console.log('update: ', addTeamData.value)
     } else {
-      Toast.fail('加载队伍失败，请刷新重试');
+      showFailToast('加载队伍失败，请刷新重试');
     }}
   )
+
+  // const expireTimeStr = computed(() => {
+  //     const date = addTeamData.value?.expireTime;
+  //     console.log('expireTimeStr: ', date)
+  //     return formateTime(date, 'YYYY-MM-DD'); // 根据本地时间格式化
+  //   });
   
+  //   const expireTimePickStr = computed(() => {
+  //     const date = addTeamData.value?.expireTime;
+  //     console.log('expireTimePickStr: ', date)
+  //     return getYearMonthDay(date); // 根据本地时间格式化
+  //   });
+
+    // const statusStr = computed(() => {
+    //    const status = addTeamData.value.status;
+    //    return status?.toString()
+    // })
+
   // 提交
   const onSubmit = async () => {
     const postData = {
       ...addTeamData.value,
-      status: Number(addTeamData.value.status)
+      status: Number(addTeamData.value?.status)
     }
     // todo 前端参数校验
-    const res = await myAxios.post("/team/update", postData);
+    const res: Result = await myAxios.post("/team/update", postData);
     if (res?.code === 0 && res.data){
-      Toast.success('更新成功');
+      showSuccessToast('更新成功');
       router.push({
         path: '/team',
         replace: true,
       });
     } else {
-      Toast.success('更新失败');
+      showFailToast('更新失败');
     }
   }
+
+  const onConfirm = ( selectedValues: any ) => {
+        console.log('selectedValues: ', selectedValues);
+      const expireTime =  selectedValues.selectedValues.join('/');
+      // console.log('addTeamData')
+      addTeamData.value.expireTime = expireTime;
+      // selectDate.value = selectedValues.selectedValues;
+      showPicker.value = false;
+    };
+
   </script>
   
   <style scoped>

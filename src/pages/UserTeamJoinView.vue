@@ -12,7 +12,8 @@
   import TeamCardList from "../components/TeamCardList.vue";
   import {onMounted, ref} from "vue";
   import myAxios from "../plugins/myAxios";
-  import {Toast} from "vant";
+  // import {Toast} from "vant";
+  import { showSuccessToast, showFailToast } from 'vant';
   
   const router = useRouter();
   const searchText = ref('');
@@ -34,7 +35,7 @@
     if (res?.code === 0) {
       teamList.value = res.data;
     } else {
-      Toast.fail('加载队伍失败，请刷新重试');
+      showFailToast('加载队伍失败，请刷新重试');
     }
   }
   

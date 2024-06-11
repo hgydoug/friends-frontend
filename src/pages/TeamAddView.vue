@@ -47,7 +47,7 @@
               @click="showPicker = true"
           />  
           <van-popup v-model:show="showPicker" position="bottom">
-            <van-date-picker @confirm="onConfirm" @cancel="showPicker = false" />
+            <van-date-picker @confirm="onConfirm" @cancel="showPicker = false"  v-model="selectDate" />
           </van-popup>
 
           <van-field name="stepper" label="最大人数">
@@ -86,27 +86,46 @@
   <script setup lang="ts">
   
   import {useRouter} from "vue-router";
-  import {ref} from "vue";
+  import {ref, computed} from "vue";
   import myAxios from "../plugins/myAxios";
-  import {Toast} from "vant";
+  // import {Toast} from "vant";
+  import { showSuccessToast, showFailToast } from 'vant';
+  import {formateTime, getYearMonthDay} from '../utils/dateutils'
+  import { TeamType } from "../models/team";
+  import { Result } from "../models/result";
+import { TeamFormType } from "../models/team.form";
+
   
   const router = useRouter();
   // 展示日期选择器
   const showPicker = ref(false);
   
-  const initFormData = {
-    "name": "",
-    "description": "",
-    "expireTime": null,
-    "maxNum": 3,
-    "password": "",
-    "status": 0,
+
+  const curDate = getYearMonthDay(new Date());
+  const curDateStr = curDate.join('/');
+
+  const initFormData : TeamFormType = {
+    expireTime:  curDateStr,
+    maxNum: 3,
+    status: "0",
   }
+console.log('lll',curDate);
+  const selectDate = ref<string[]>([...curDate]);
   
-  const minDate = new Date();
+  // const minDate = new Date();
   
   // 需要用户填写的表单数据
   const addTeamData = ref({...initFormData})
+
+// const expireTimeStr = computed(() => {
+//     const date = addTeamData.value.expireTime;
+//     return formateTime(date, 'YYYY-MM-DD'); // 根据本地时间格式化
+// });
+
+// const expireTimePickStr = computed(() => {
+//     const date = addTeamData.value.expireTime;
+//     return getYearMonthDay(date); // 根据本地时间格式化
+// });
   
   // 提交
   const onSubmit = async () => {
@@ -115,20 +134,24 @@
       status: Number(addTeamData.value.status)
     }
     // todo 前端参数校验
-    const res = await myAxios.post("/team/add", postData);
+    const res: Result = await myAxios.post("/team/add", postData);
     if (res?.code === 0 && res.data){
-      Toast.success('添加成功');
+      showSuccessToast('添加成功');
       router.push({
         path: '/team',
         replace: true,
       });
     } else {
-      Toast.success('添加失败');
+      showFailToast('添加失败');
     }
   }
 
-  const onConfirm = ({ selectedValues }) => {
-      addTeamData.value.expireTime = selectedValues.join('/');
+  const onConfirm = ( selectedValues ) => {
+        console.log('selectedValues: ', selectedValues);
+      const expireTime =  selectedValues.selectedValues.join('/');
+      // console.log('addTeamData')
+      addTeamData.value.expireTime = expireTime;
+      // selectDate.value = selectedValues.selectedValues;
       showPicker.value = false;
     };
 

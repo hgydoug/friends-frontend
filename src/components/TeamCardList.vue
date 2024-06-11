@@ -2,9 +2,9 @@
     <div
         id="teamCardList"
     >
+     <!-- :thumb="ikun" -->
       <van-card
           v-for="team in props.teamList"
-          :thumb="ikun"
           :desc="team.description"
           :title="`${team.name}`"
       >
@@ -20,10 +20,10 @@
             {{ `队伍人数: ${team.hasJoinNum}/${team.maxNum}` }}
           </div>
           <div v-if="team.expireTime">
-            {{ '过期时间: ' + team.expireTime }}
+            {{ '过期时间: ' + formateTime(team.expireTime, 'YYYY-MM-DD HH:mm:ss') }}
           </div>
           <div>
-            {{ '创建时间: ' + team.createTime }}
+            {{ '创建时间: ' + formateTime(team.createTime, 'YYYY-MM-DD HH:mm:ss') }}
           </div>
         </template>
         <template #footer>
@@ -55,10 +55,13 @@
   import {teamStatusEnum} from "../constants/team";
   // import ikun from '../assets/ikun.png';
   import myAxios from "../plugins/myAxios";
-  import {Dialog, Toast} from "vant";
+  // import {Toast} from "vant";
+  import { showSuccessToast, showFailToast } from 'vant';
   import {onMounted, ref} from "vue";
   import {getCurrentUser} from "../service/user";
   import {useRouter} from "vue-router";
+  import {formateTime} from '../utils/dateutils'
+import { Result } from "../models/result";
   
   interface TeamCardListProps {
     teamList: TeamType[];
@@ -101,15 +104,15 @@
     if (!joinTeamId.value) {
       return;
     }
-    const res = await myAxios.post('/team/join', {
+    const res : Result = await myAxios.post('/team/join', {
       teamId: joinTeamId.value,
       password: password.value
     });
     if (res?.code === 0) {
-      Toast.success('加入成功');
+      showSuccessToast('加入成功');
       doJoinCancel();
     } else {
-      Toast.fail('加入失败' + (res.description ? `，${res.description}` : ''));
+      showFailToast('加入失败' + (res.description ? `，${res.description}` : ''));
     }
   }
   
@@ -131,13 +134,13 @@
    * @param id
    */
   const doQuitTeam = async (id: number) => {
-    const res = await myAxios.post('/team/quit', {
+    const res: Result = await myAxios.post('/team/quit', {
       teamId: id
     });
     if (res?.code === 0) {
-      Toast.success('操作成功');
+      showSuccessToast('操作成功');
     } else {
-      Toast.fail('操作失败' + (res.description ? `，${res.description}` : ''));
+      showFailToast('操作失败' + (res.description ? `，${res.description}` : ''));
     }
   }
   
@@ -146,13 +149,13 @@
    * @param id
    */
   const doDeleteTeam = async (id: number) => {
-    const res = await myAxios.post('/team/delete', {
+    const res: Result = await myAxios.post('/team/delete', {
       id,
     });
     if (res?.code === 0) {
-      Toast.success('操作成功');
+      showSuccessToast('操作成功');
     } else {
-      Toast.fail('操作失败' + (res.description ? `，${res.description}` : ''));
+      showFailToast('操作失败' + (res.description ? `，${res.description}` : ''));
     }
   }
   </script>

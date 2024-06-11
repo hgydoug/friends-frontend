@@ -11,7 +11,8 @@
   <script setup lang="ts">
   import { ref, watchEffect } from 'vue';
   import myAxios from "../plugins/myAxios";
-  import {Toast} from "vant";
+  // import {Toast} from "vant";
+  import { showSuccessToast, showFailToast } from 'vant';
   import UserCardList from "../components/UserCardList.vue";
   import {UserType} from "../models/user";
   
@@ -40,7 +41,7 @@
           })
           .catch(function (error) {
             console.error('/user/match error', error);
-            Toast.fail('请求失败');
+           showFailToast('请求失败');
           })
     } else {
       // 普通模式，直接分页查询用户
@@ -56,7 +57,7 @@
           })
           .catch(function (error) {
             console.error('/user/recommend error', error);
-            Toast.fail('请求失败');
+            showFailToast('请求失败');
           })
     }
     if (userListData) {
@@ -70,6 +71,7 @@
     loading.value = false;
   }
   
+  // 监控所有响应式数据的变化，监听到变化之后就执行，初始化时会执行一次。
   watchEffect(() => {
     loadData();
   })
