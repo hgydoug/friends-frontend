@@ -10,7 +10,8 @@ import {onMounted, ref} from 'vue';
 import {useRoute} from "vue-router";
 import myAxios from "../plugins/myAxios";
 // import {Toast} from "vant";
-import { showSuccessToast, showFailToast } from 'vant';
+// showSuccessToast
+import {  showFailToast } from 'vant';
 import qs from 'qs';
 import UserCardList from "../components/UserCardList.vue";
 import { UserType } from '../models/user';

@@ -86,12 +86,12 @@
   <script setup lang="ts">
   
   import {useRouter} from "vue-router";
-  import {ref, computed} from "vue";
+  import {ref} from "vue";
   import myAxios from "../plugins/myAxios";
   // import {Toast} from "vant";
   import { showSuccessToast, showFailToast } from 'vant';
-  import {formateTime, getYearMonthDay} from '../utils/dateutils'
-  import { TeamType } from "../models/team";
+  import { getYearMonthDay} from '../utils/dateutils'
+  // import { TeamType } from "../models/team";
   import { Result } from "../models/result";
 import { TeamFormType } from "../models/team.form";
 
@@ -145,8 +145,10 @@ console.log('lll',curDate);
       showFailToast('添加失败');
     }
   }
+// const s = 1;
+//   console.log(typeof s)
 
-  const onConfirm = ( selectedValues ) => {
+  const onConfirm = ( selectedValues: any ) => {
         console.log('selectedValues: ', selectedValues);
       const expireTime =  selectedValues.selectedValues.join('/');
       // console.log('addTeamData')

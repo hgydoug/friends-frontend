@@ -64,12 +64,12 @@
   <script setup lang="ts">
   
   import {useRoute, useRouter} from "vue-router";
-  import {onMounted, ref, computed} from "vue";
+  import {onMounted, ref} from "vue";
   import myAxios from "../plugins/myAxios";
   // import {Toast} from "vant";
   import { showSuccessToast, showFailToast } from 'vant';
-  import {formateTime, getYearMonthDay} from '../utils/dateutils';
-import { TeamType } from "../models/team";
+  import { getYearMonthDay} from '../utils/dateutils';
+// import { TeamType } from "../models/team";
 import { Result } from "../models/result";
 import { TeamFormType } from "../models/team.form";
 
@@ -81,7 +81,7 @@ import { TeamFormType } from "../models/team.form";
   // 展示日期选择器
   const showPicker = ref(false);
   
-  const minDate = new Date();
+  // const minDate = new Date();
   
   const id = route.query.id;
   

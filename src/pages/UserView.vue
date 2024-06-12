@@ -38,17 +38,17 @@ onMounted(async () => {
     user.value = await getCurrentUser();
 })
 
-const toEdit = (editKey: string, editName: string, currentValue: string) => {
-    console.log('==',editKey, editName , currentValue)
-    router.push({
-        path: '/user/edit',
-        query: {
-            editKey,
-            editName,
-            currentValue,
-        }
-    })
-}
+// const toEdit = (editKey: string, editName: string, currentValue: string) => {
+//     console.log('==',editKey, editName , currentValue)
+//     router.push({
+//         path: '/user/edit',
+//         query: {
+//             editKey,
+//             editName,
+//             currentValue,
+//         }
+//     })
+// }
 
 </script>
 

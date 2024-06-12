@@ -8,14 +8,15 @@
   
   <script setup lang="ts">
   
-  import {useRouter} from "vue-router";
+  // import {useRouter} from "vue-router";
   import TeamCardList from "../components/TeamCardList.vue";
   import {onMounted, ref} from "vue";
   import myAxios from "../plugins/myAxios";
   // import {Toast} from "vant";
-  import { showSuccessToast, showFailToast } from 'vant';
+  import { showFailToast } from 'vant';
+import { Result } from "../models/result";
   
-  const router = useRouter();
+  // const router = useRouter();
   const searchText = ref('');
   
   const teamList = ref([]);
@@ -26,7 +27,7 @@
    * @returns {Promise<void>}
    */
   const listTeam = async (val = '') => {
-    const res = await myAxios.get("/team/list/my/join", {
+    const res: Result = await myAxios.get("/team/list/my/join", {
       params: {
         searchText: val,
         pageNum: 1,
@@ -45,7 +46,7 @@
     listTeam();
   })
   
-  const onSearch = (val) => {
+  const onSearch = (val: string) => {
     listTeam(val);
   };
   

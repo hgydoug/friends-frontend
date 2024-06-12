@@ -14,7 +14,7 @@
   import {onMounted, ref} from "vue";
   import myAxios from "../plugins/myAxios";
   // import {Toast} from "vant";
-  import { showSuccessToast, showFailToast } from 'vant';
+  import { showFailToast } from 'vant';
 import { Result } from "../models/result";
   
   const router = useRouter();
@@ -54,7 +54,7 @@ import { Result } from "../models/result";
     listTeam();
   })
   
-  const onSearch = (val) => {
+  const onSearch = (val: string) => {
     listTeam(val)
   };
   
