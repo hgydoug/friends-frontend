@@ -30,7 +30,8 @@ const title = ref(DEFAULT_TITLE);
 
 
 // 路由前卫 （发生路由跳转之前的回掉）
-router.beforeEach((to, from) => {
+// from
+router.beforeEach((to) => {
    const toPath = to.path;
    const route = routes.find((route) => {
     return toPath == route.path; 

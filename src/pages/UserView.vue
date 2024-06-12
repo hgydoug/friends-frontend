@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import { UserType } from '../models/user';
 import {getCurrentUser} from '../service/user'
 
@@ -32,7 +32,7 @@ import {getCurrentUser} from '../service/user'
 
 const user = ref<UserType>();
 
-const router = useRouter();
+// const router = useRouter();
 
 onMounted(async () => {
     user.value = await getCurrentUser();
