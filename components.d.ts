@@ -8,17 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
-    IndexPage: typeof import('./src/components/IndexPage.vue')['default']
-    IndexView: typeof import('./src/components/IndexView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SearchView: typeof import('./src/components/SearchView.vue')['default']
     TeamCardList: typeof import('./src/components/TeamCardList.vue')['default']
-    TeamPage: typeof import('./src/components/TeamPage.vue')['default']
-    TeamView: typeof import('./src/components/TeamView.vue')['default']
     UserCardList: typeof import('./src/components/UserCardList.vue')['default']
-    UserPage: typeof import('./src/components/UserPage.vue')['default']
-    UserView: typeof import('./src/components/UserView.vue')['default']
     VanButton: typeof import('vant/es')['Button']
     VanCard: typeof import('vant/es')['Card']
     VanCell: typeof import('vant/es')['Cell']
